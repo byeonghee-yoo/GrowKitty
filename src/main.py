@@ -1,1 +1,0 @@
-print("GrowKitty initial skeleton") 
