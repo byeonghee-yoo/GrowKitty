@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ddd | Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="ddd" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description." />
+<meta property="og:description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description." />
+<link rel="canonical" href="http://localhost:4000/spinwheel/page.html" />
+<meta property="og:url" content="http://localhost:4000/spinwheel/page.html" />
+<meta property="og:site_name" content="ddd" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ddd" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.","headline":"ddd","url":"http://localhost:4000/spinwheel/page.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link type="application/atom+xml" rel="alternate" href="/feed.xml" title="ddd" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/">ddd</a>
+    <nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger">
+        <span class="menu-icon">
+          <svg viewBox="0 0 18 15" width="18px" height="15px">
+            <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z" />
+          </svg>
+        </span>
+      </label>
+      <div class="trigger">
+        
+          
+        
+          
+            <a class="page-link" href="/about/">About</a>
+          
+        
+          
+            <a class="page-link" href="/contact/">Contact</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+  </div>
+</header>
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="wrapper">
+  <!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Spin Wheel</title>
+  <link rel="stylesheet" href="/spinwheel/style.css">
+</head>
+<body>
+  <h1 style="text-align: center; color: #000000; margin-bottom: 20px; font-size: 2.5vw;">오늘의 할 일</h1>
+  <div class="container">
+    <canvas id="wheel" width="400" height="400"></canvas>
+    <div class="triangle"></div>
+    <button id="spin">SPIN</button>
+  </div>
+  <div id="dashboard"></div>
+
+  <script>
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = 150;
+
+    const slices = [
+      { color: '#db7093', text: '100' },      //0 > 5
+      { color: '#20b2aa', text: '1' },        //1 > 4
+      { color: '#d63e92', text: '50' },       //2 > 3
+      { color: '#daa520', text: '0' },        //3 > 2
+      { color: '#ff340f', text: '1000' },     //4 > 1
+      { color: '#ff7f50', text: '10' },       //5 > 0
+      { color: '#3cb371', text: '5' },        //6 > 7
+      { color: '#4169e1', text: '20' }        //7 > 6
+    ];
+
+    function drawWheel(rotation = 0) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const sliceAngle = (2 * Math.PI) / slices.length;
+
+      for (let i = 0; i < slices.length; i++) {
+        const start = i * sliceAngle + rotation;
+        const end = start + sliceAngle;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = slices[i].color;
+        ctx.fill();
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(start + 5*sliceAngle / 2);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 18px sans-serif';
+        ctx.fillText(slices[i].text, 0, -(radius - 20));
+        ctx.restore();
+      }
+    }
+
+    drawWheel();
+
+    function updateDashboard(value) {
+      const span = document.createElement('div');
+      span.textContent = `Spin Value: ${Math.floor(value)}`;
+      span.style.opacity = 0;
+      dashboard.prepend(span);
+      setTimeout(() => (span.style.opacity = 1), 50);
+    }
+
+    let currentRotation = 0;
+    const dashboard = document.getElementById('dashboard');
+
+    document.getElementById('spin').onclick = function() {
+      const spinValue = Math.random() * 3600 + 720;
+      const duration = 2500;
+      const start = performance.now();
+
+      function animate(time) {
+        const progress = Math.min((time - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 2);
+        const angle = currentRotation + spinValue * eased * Math.PI / 180;
+        drawWheel(angle);
+
+        const sliceAngle = (2 * Math.PI) / slices.length;
+        let normalized = angle % (2 * Math.PI);
+        if (normalized < 0) normalized += 2 * Math.PI;
+        const index = (13 - Math.floor(normalized / sliceAngle)) % slices.length;
+
+        updateDashboard(slices[index].text);
+        if (progress < 1) requestAnimationFrame(animate);
+        else{
+           currentRotation += spinValue * Math.PI / 180;
+           updateDashboard(slices[index].text);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    };
+  </script>
+</body>
+</html>
+</div>
+
+      </div>
+    </main>
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper">
+    <h2 class="footer-heading">ddd</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <!--
+        <ul class="contact-list">
+          <li class="p-name">ddd</li>
+          
+            <li><a class="u-email" href="mailto:your-email@example.com">your-email@example.com</a></li>
+          
+        </ul>
+        -->
+      </div>
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+            <li>
+              <a href="https://github.com/jekyll">
+                <svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg>
+                <span class="username">jekyll</span>
+              </a>
+            </li>
+          
+          
+            <li>
+              <a href="https://www.twitter.com/jekyllrb">
+                <svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg>
+                <span class="username">jekyllrb</span>
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

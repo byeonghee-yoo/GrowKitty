@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Spin Wheel</title>
+  <link rel="stylesheet" href="/spinwheel/style.css">
+</head>
+<body>
+  <h1 style="text-align: center; color: #000000; margin-bottom: 20px; font-size: 2.5vw;">오늘의 할 일</h1>
+  <div class="container">
+    <canvas id="wheel" width="400" height="400"></canvas>
+    <div class="triangle"></div>
+    <button id="spin">SPIN</button>
+  </div>
+  <div id="dashboard"></div>
+
+  <script>
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = 150;
+
+    const slices = [
+      { color: '#db7093', text: '100' },      //0 > 5
+      { color: '#20b2aa', text: '1' },        //1 > 4
+      { color: '#d63e92', text: '50' },       //2 > 3
+      { color: '#daa520', text: '0' },        //3 > 2
+      { color: '#ff340f', text: '1000' },     //4 > 1
+      { color: '#ff7f50', text: '10' },       //5 > 0
+      { color: '#3cb371', text: '5' },        //6 > 7
+      { color: '#4169e1', text: '20' }        //7 > 6
+    ];
+
+    function drawWheel(rotation = 0) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const sliceAngle = (2 * Math.PI) / slices.length;
+
+      for (let i = 0; i < slices.length; i++) {
+        const start = i * sliceAngle + rotation;
+        const end = start + sliceAngle;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = slices[i].color;
+        ctx.fill();
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(start + 5*sliceAngle / 2);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 18px sans-serif';
+        ctx.fillText(slices[i].text, 0, -(radius - 20));
+        ctx.restore();
+      }
+    }
+
+    drawWheel();
+
+    function updateDashboard(value) {
+      const span = document.createElement('div');
+      span.textContent = `Spin Value: ${Math.floor(value)}`;
+      span.style.opacity = 0;
+      dashboard.prepend(span);
+      setTimeout(() => (span.style.opacity = 1), 50);
+    }
+
+    let currentRotation = 0;
+    const dashboard = document.getElementById('dashboard');
+
+    document.getElementById('spin').onclick = function() {
+      const spinValue = Math.random() * 3600 + 720;
+      const duration = 2500;
+      const start = performance.now();
+
+      function animate(time) {
+        const progress = Math.min((time - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 2);
+        const angle = currentRotation + spinValue * eased * Math.PI / 180;
+        drawWheel(angle);
+
+        const sliceAngle = (2 * Math.PI) / slices.length;
+        let normalized = angle % (2 * Math.PI);
+        if (normalized < 0) normalized += 2 * Math.PI;
+        const index = (13 - Math.floor(normalized / sliceAngle)) % slices.length;
+
+        updateDashboard(slices[index].text);
+        if (progress < 1) requestAnimationFrame(animate);
+        else{
+           currentRotation += spinValue * Math.PI / 180;
+           updateDashboard(slices[index].text);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    };
+  </script>
+</body>
+</html>

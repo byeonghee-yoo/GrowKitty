@@ -1,0 +1,10 @@
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}
+{'value': 'SPIN'}

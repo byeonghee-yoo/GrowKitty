@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .page-content h1, .page-content p { color: black !important; }
+</style>
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body>
+<h1>Hello!!</h1>
+<p>asd.</p>
+<button id="spin">SPIN</button>
+<input id="titleInput" placeholder="새 제목 입력">
+<button onclick="updateTitle()">업데이트</button>
+<script>
+    window.onpageshow = function(e) {
+        if (e.persisted) window.location.reload();
+    };
+    document.getElementById('spin').addEventListener('click', function() {
+        alert('SPIN');
+        fetch("http://127.0.0.1:5000/save", {   //fetch: 데이터를 가져오는 함수
+            method: "POST",     //GET: 가져오기, POST: 보내기, PUT: 수정, DELETE: 삭제
+            headers: {"Content-Type":"application/json"}, //Content-Type: 데이터의 형식
+            body: JSON.stringify({ value: "SPIN" }) //JSON.stringify: 객체를 문자열로 변환
+        });
+    });
+    function updateTitle() {
+        const newTitle = document.getElementById("titleInput").value;
+
+        fetch("http://127.0.0.1:5000/update", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+            title: newTitle
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("서버 응답:", data);
+            alert("업데이트 완료. 새로운 타이틀: " + data.updated.title);
+        })
+        .catch(err => console.error(err));
+    }
+</script>
+</body>
+</html>

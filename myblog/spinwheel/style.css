@@ -1,0 +1,66 @@
+/* 1) body flex-center 제거해서 전체 페이지 깨지는 문제 해결 */
+body {
+  background: #ffffff;
+}
+
+/* 2) 전체 크기 줄이기 */
+.container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 40px auto; /* 페이지 안 중앙 위치 */
+}
+
+#wheel {
+  width: 300px;
+  height: 300px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+/* 3) 삼각형도 축소 */
+.triangle {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 40px solid #ff340f;
+}
+
+/* 4) SPIN 버튼 축소 */
+#spin {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: none;
+  background: #ff7f50;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+/* 5) 대시보드도 축소 */
+#dashboard {
+  width: 320px;
+  height: 100px;
+  margin: 20px auto;
+  font-size: 20px;
+  text-align: center;
+  color: #ff7f50;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 10px 20px;
+  border-radius: 10px;
+  min-height: 40px;
+  overflow-y: auto;
+}
